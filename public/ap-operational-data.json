@@ -1,0 +1,171 @@
+{
+  "commissionerates": [
+    {
+      "id": "ntr",
+      "name": "NTR District Police",
+      "city": "Vijayawada",
+      "stationCount": 8,
+      "colorHue": 213,
+      "status": "high-caseload",
+      "commissioner": {
+        "name": "Kanti Rana Tata, IPS",
+        "rank": "Commissioner of Police",
+        "badge": "KT",
+        "batch": "2001 Batch · AP Cadre",
+        "phone": "0866-2440991",
+        "email": "cp-ntr@appolice.gov.in",
+        "awards": ["President's Police Medal", "DGP Commendation 2021", "Anti-Naxal Ops Medal"],
+        "bio": "A veteran IPS officer with 22+ years in law enforcement. Decorated for leadership during Operation Prahar and landmark cybercrime busts in the Krishna-Guntur belt.",
+        "joinedPost": "2023-08-15"
+      },
+      "caseload": {
+        "total": 560,
+        "active": 218,
+        "solved": 312,
+        "pending": 30,
+        "highPriority": 24,
+        "solvingRate": 85
+      },
+      "priorityTasks": [
+        { "id": "ntr-t1", "title": "Operation Prahar III", "type": "Organised Crime", "priority": "critical", "target": "Inter-state drug trafficking syndicate", "progress": 72, "daysActive": 18, "status": "active" },
+        { "id": "ntr-t2", "title": "Cyber Fraud Crackdown", "type": "Cybercrime", "priority": "high", "target": "Online banking fraud cells in Vijayawada", "progress": 55, "daysActive": 9, "status": "active" },
+        { "id": "ntr-t3", "title": "Krishna River Smuggling", "type": "Smuggling", "priority": "high", "target": "Contraband movement via river routes", "progress": 40, "daysActive": 6, "status": "active" },
+        { "id": "ntr-t4", "title": "Traffic Safety Drive", "type": "Traffic", "priority": "medium", "target": "Reduce accident fatalities on NH-16", "progress": 88, "daysActive": 30, "status": "ongoing" }
+      ],
+      "zones": [
+        {
+          "id": "ntr-z1",
+          "name": "Zone I — City Core",
+          "status": "high-caseload",
+          "dcp": {
+            "name": "T. Rajendra Prasad, IPS",
+            "rank": "DCP Zone I",
+            "badge": "RP",
+            "batch": "2011 Batch",
+            "phone": "0866-2440992",
+            "activeCases": 94,
+            "solved": 68
+          },
+          "activeInvestigations": [
+            { "id": "i1", "title": "Krishnalanka Market Fraud", "type": "Economic Offence", "priority": "high", "daysOpen": 12, "status": "active", "suspects": 4 },
+            { "id": "i2", "title": "Auto-Nagar Land Dispute", "type": "Land Grabbing", "priority": "medium", "daysOpen": 22, "status": "active", "suspects": 7 },
+            { "id": "i3", "title": "ATM Skimming Network", "type": "Cybercrime", "priority": "critical", "daysOpen": 5, "status": "active", "suspects": 3 },
+            { "id": "i4", "title": "Patamata Chain Snatching", "type": "Street Crime", "priority": "medium", "daysOpen": 8, "status": "active", "suspects": 2 }
+          ],
+          "divisions": ["Vijayawada City Division", "Krishnalanka Division"]
+        },
+        {
+          "id": "ntr-z2",
+          "name": "Zone II — Rural",
+          "status": "operational",
+          "dcp": {
+            "name": "M. Venkata Subba Rao, IPS",
+            "rank": "DCP Zone II",
+            "badge": "VS",
+            "batch": "2013 Batch",
+            "phone": "0866-2440993",
+            "activeCases": 62,
+            "solved": 48
+          },
+          "activeInvestigations": [
+            { "id": "i5", "title": "Gannavaram Sand Mining", "type": "Environmental Crime", "priority": "high", "daysOpen": 19, "status": "active", "suspects": 11 },
+            { "id": "i6", "title": "Ibrahimpatnam Robbery", "type": "Robbery", "priority": "medium", "daysOpen": 4, "status": "active", "suspects": 2 },
+            { "id": "i7", "title": "Penamaluru Narcotics", "type": "NDPS", "priority": "critical", "daysOpen": 7, "status": "active", "suspects": 5 }
+          ],
+          "divisions": ["Gannavaram Division"]
+        }
+      ]
+    },
+    {
+      "id": "vizag",
+      "name": "Visakhapatnam City Police",
+      "city": "Visakhapatnam",
+      "stationCount": 23,
+      "colorHue": 43,
+      "status": "operational",
+      "commissioner": {
+        "name": "Dr. A. Ravi Shankar Ayyanar, IPS",
+        "rank": "Commissioner of Police",
+        "badge": "AS",
+        "batch": "2009 Batch · AGMUT Cadre",
+        "phone": "0891-2503001",
+        "email": "cp-vizag@appolice.gov.in",
+        "awards": ["IPS Meritorious Service Medal", "Coastal Security Award 2022"],
+        "bio": "Specialises in coastal & port security, cyber intelligence, and community policing. Led major port smuggling busts and digital crime prevention drives.",
+        "joinedPost": "2022-11-01"
+      },
+      "caseload": {
+        "total": 695,
+        "active": 342,
+        "solved": 313,
+        "pending": 40,
+        "highPriority": 31,
+        "solvingRate": 78
+      },
+      "priorityTasks": [
+        { "id": "vizag-t1", "title": "Operation Blue Shield", "type": "Port Security", "priority": "critical", "target": "Illegal cargo at Vizag Port & North Port zones", "progress": 60, "daysActive": 14, "status": "active" },
+        { "id": "vizag-t2", "title": "Anti-Extortion Drive", "type": "Organised Crime", "priority": "high", "target": "Business extortion rackets in Gajuwaka", "progress": 45, "daysActive": 8, "status": "active" },
+        { "id": "vizag-t3", "title": "Steel City Cyber Patrol", "type": "Cybercrime", "priority": "high", "target": "Online investment fraud targeting steel workers", "progress": 70, "daysActive": 21, "status": "active" },
+        { "id": "vizag-t4", "title": "Beach Road Safety Mission", "type": "Traffic & Safety", "priority": "medium", "target": "Accident prevention on Beach Rd corridor", "progress": 92, "daysActive": 45, "status": "ongoing" }
+      ],
+      "zones": [
+        {
+          "id": "vizag-z1",
+          "name": "Zone I — Port City",
+          "status": "high-caseload",
+          "dcp": {
+            "name": "Ch. Srinivasa Rao, IPS",
+            "rank": "DCP Zone I",
+            "badge": "SR",
+            "batch": "2010 Batch",
+            "phone": "0891-2503010",
+            "activeCases": 142,
+            "solved": 105
+          },
+          "activeInvestigations": [
+            { "id": "v1", "title": "Harbour Contraband Seizure", "type": "Smuggling", "priority": "critical", "daysOpen": 3, "status": "active", "suspects": 9 },
+            { "id": "v2", "title": "I-Town Financial Fraud", "type": "Economic Offence", "priority": "high", "daysOpen": 17, "status": "active", "suspects": 6 },
+            { "id": "v3", "title": "Gajuwaka Gang Violence", "type": "Organised Crime", "priority": "high", "daysOpen": 11, "status": "active", "suspects": 8 },
+            { "id": "v4", "title": "Steel Plant Theft Ring", "type": "Theft", "priority": "medium", "daysOpen": 28, "status": "active", "suspects": 12 },
+            { "id": "v5", "title": "Maharanipeta Narcotics", "type": "NDPS", "priority": "critical", "daysOpen": 6, "status": "active", "suspects": 4 }
+          ],
+          "divisions": ["I Town Division", "Gajuwaka Division"]
+        },
+        {
+          "id": "vizag-z2",
+          "name": "Zone II — North Vizag",
+          "status": "operational",
+          "dcp": {
+            "name": "G. Pala Raju, IPS",
+            "rank": "DCP Zone II",
+            "badge": "PR",
+            "batch": "2012 Batch",
+            "phone": "0891-2503020",
+            "activeCases": 112,
+            "solved": 87
+          },
+          "activeInvestigations": [
+            { "id": "v6", "title": "Pendurthi Land Fraud", "type": "Land Grabbing", "priority": "high", "daysOpen": 15, "status": "active", "suspects": 5 },
+            { "id": "v7", "title": "Duvvada Rail Theft", "type": "Theft", "priority": "medium", "daysOpen": 9, "status": "active", "suspects": 3 },
+            { "id": "v8", "title": "Airport Zone Smuggling", "type": "Smuggling", "priority": "critical", "daysOpen": 2, "status": "active", "suspects": 7 }
+          ],
+          "divisions": ["Pendurthi Division", "Gopalapatnam Division"]
+        }
+      ]
+    }
+  ],
+  "districts": [
+    { "id": "krishna", "status": "high-caseload", "caseload": { "total": 320, "active": 156, "solved": 148, "highPriority": 18, "solvingRate": 74 }, "sp": { "name": "P.S.R. Anjaneyulu, IPS", "badge": "AN", "activeCases": 156 }, "priorityTasks": [{ "title": "Machilipatnam Port Watch", "priority": "high", "progress": 58 }, { "title": "Rural Robbery Sweep", "priority": "medium", "progress": 44 }] },
+    { "id": "guntur",  "status": "operational",   "caseload": { "total": 398, "active": 198, "solved": 183, "highPriority": 21, "solvingRate": 72 }, "sp": { "name": "G. Siddharth Kaushal, IPS", "badge": "SK", "activeCases": 198 }, "priorityTasks": [{ "title": "Canal Belt Narcotics", "priority": "critical", "progress": 39 }, { "title": "Guntur City Safe Drive", "priority": "medium", "progress": 81 }] },
+    { "id": "tirupati","status": "operational",   "caseload": { "total": 248, "active": 132, "solved": 110, "highPriority": 12, "solvingRate": 79 }, "sp": { "name": "B. Venkateswara Rao, IPS", "badge": "BV", "activeCases": 132 }, "priorityTasks": [{ "title": "Tirumala Pilgrim Safety", "priority": "high", "progress": 94 }, { "title": "Forest Encroachment Drive", "priority": "medium", "progress": 60 }] },
+    { "id": "nellore", "status": "operational",   "caseload": { "total": 275, "active": 145, "solved": 116, "highPriority": 14, "solvingRate": 75 }, "sp": { "name": "M. Deepika, IPS", "badge": "MD", "activeCases": 145 }, "priorityTasks": [{ "title": "Coastal Surveillance Drive", "priority": "high", "progress": 67 }, { "title": "SPSR Highway Patrol", "priority": "medium", "progress": 72 }] },
+    { "id": "kurnool", "status": "high-caseload", "caseload": { "total": 319, "active": 169, "solved": 131, "highPriority": 22, "solvingRate": 69 }, "sp": { "name": "K.H. Rao, IPS", "badge": "KH", "activeCases": 169 }, "priorityTasks": [{ "title": "Mining Mafia Crackdown", "priority": "critical", "progress": 33 }, { "title": "Kurnool Town Safety", "priority": "medium", "progress": 55 }] },
+    { "id": "kadapa",  "status": "operational",   "caseload": { "total": 231, "active": 122, "solved": 97,  "highPriority": 11, "solvingRate": 77 }, "sp": { "name": "R. Bhaskar, IPS", "badge": "RB", "activeCases": 122 }, "priorityTasks": [{ "title": "YSR Boundary Disputes", "priority": "high", "progress": 50 }] },
+    { "id": "chittoor","status": "operational",   "caseload": { "total": 262, "active": 138, "solved": 108, "highPriority": 13, "solvingRate": 78 }, "sp": { "name": "S. Senthil Kumar, IPS", "badge": "SS", "activeCases": 138 }, "priorityTasks": [{ "title": "Srikalahasti Corridor Patrol", "priority": "medium", "progress": 76 }] },
+    { "id": "anantapur","status":"operational",   "caseload": { "total": 283, "active": 148, "solved": 115, "highPriority": 15, "solvingRate": 70 }, "sp": { "name": "F. Sultan, IPS", "badge": "FS", "activeCases": 148 }, "priorityTasks": [{ "title": "Tungabhadra Sand Mining", "priority": "high", "progress": 48 }] },
+    { "id": "srikakulam","status":"operational",  "caseload": { "total": 196, "active": 102, "solved": 83,  "highPriority": 9,  "solvingRate": 76 }, "sp": { "name": "C. Sudheer Kumar Reddy, IPS", "badge": "CS", "activeCases": 102 }, "priorityTasks": [{ "title": "Border Surveillance Watch", "priority": "medium", "progress": 62 }] },
+    { "id": "vizianagaram","status":"operational","caseload": { "total": 214, "active": 113, "solved": 89,  "highPriority": 10, "solvingRate": 73 }, "sp": { "name": "B. Raja Kumari, IPS", "badge": "BR", "activeCases": 113 }, "priorityTasks": [{ "title": "Tribal Area Security", "priority": "high", "progress": 55 }] },
+    { "id": "eastgodavari","status":"high-caseload","caseload": { "total": 338, "active": 178, "solved": 139, "highPriority": 19, "solvingRate": 71 }, "sp": { "name": "D.V. Srikanth, IPS", "badge": "DS", "activeCases": 178 }, "priorityTasks": [{ "title": "Godavari Delta Security", "priority": "critical", "progress": 42 }, { "title": "Kakinada Port Watch", "priority": "high", "progress": 61 }] },
+    { "id": "westgodavari","status":"operational","caseload": { "total": 301, "active": 159, "solved": 124, "highPriority": 16, "solvingRate": 74 }, "sp": { "name": "K. Suresh Reddy, IPS", "badge": "KS", "activeCases": 159 }, "priorityTasks": [{ "title": "Eluru Cybercrime Drive", "priority": "high", "progress": 69 }] }
+  ]
+}

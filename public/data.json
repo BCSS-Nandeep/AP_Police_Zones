@@ -1,0 +1,132 @@
+{
+  "commissionerates": [
+    {
+      "id": "vizag",
+      "name": "Visakhapatnam City Police",
+      "shortName": "Vizag CP",
+      "city": "Visakhapatnam",
+      "hq": "Visakhapatnam",
+      "colorHue": 43,
+      "colorName": "Gold",
+      "stationCount": 23,
+      "phone": "0891-2503000",
+      "email": "cp-vizag@appolice.gov.in",
+      "website": "visakhapatnam.appolice.gov.in",
+      "lat": 17.6868,
+      "lng": 83.2185,
+      "commissioner": {
+        "name": "Dr. A. Ravi Shankar Ayyanar, IPS",
+        "rank": "Commissioner of Police",
+        "badge": "AS",
+        "batch": "2009 Batch, AGMUT Cadre",
+        "phone": "0891-2503001",
+        "bio": "IPS officer with 15+ years in law enforcement, specialising in crime analytics and coastal security operations."
+      },
+      "stats": {
+        "activeCases": 342,
+        "personnelOnDuty": 2840,
+        "patrolUnits": 48,
+        "detentions": 12,
+        "firs": 87,
+        "solved": 263
+      },
+      "zones": [
+        {
+          "id": "vizag-z1",
+          "name": "Zone I — Port City",
+          "dcp": { "name": "Ch. Srinivasa Rao, IPS", "rank": "DCP Zone I", "badge": "SR", "phone": "0891-2503010" },
+          "divisions": [
+            { "id": "vizag-d1", "name": "I Town Division", "sdpo": "P. Ramakrishna", "stations": ["I TOWN","II TOWN","III TOWN","IV TOWN","HARBOUR","MAHARANIPETA"] },
+            { "id": "vizag-d2", "name": "Gajuwaka Division", "sdpo": "M. Suresh Babu", "stations": ["GAJUWAKA","STEELPLANT","DWARAKA","MUVVALAVANIPALEM","ARILOVA","PM PALEM"] }
+          ]
+        },
+        {
+          "id": "vizag-z2",
+          "name": "Zone II — North Vizag",
+          "dcp": { "name": "G. Pala Raju, IPS", "rank": "DCP Zone II", "badge": "PR", "phone": "0891-2503020" },
+          "divisions": [
+            { "id": "vizag-d3", "name": "Pendurthi Division", "sdpo": "B. Venkatesh Rao", "stations": ["PENDUTHY","ANANDAPURAM","BHEEMUNIPATNAM","PADMANABHAM","PARAWADA","AIRPORT"] },
+            { "id": "vizag-d4", "name": "Gopalapatnam Division", "sdpo": "T. Nagaraju", "stations": ["GOPALAPATNAM","NEW PORT","DUVVADA","KANCHARAPALEM","MALKAPURAM"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ntr",
+      "name": "NTR District Police",
+      "shortName": "NTR CP",
+      "city": "Vijayawada",
+      "hq": "Vijayawada",
+      "colorHue": 210,
+      "colorName": "Azure",
+      "stationCount": 8,
+      "phone": "0866-2440990",
+      "email": "cp-ntr@appolice.gov.in",
+      "website": "ntr.appolice.gov.in",
+      "lat": 16.5062,
+      "lng": 80.6480,
+      "commissioner": {
+        "name": "S.V. Rajasekhar Babu, IPS",
+        "rank": "Commissioner of Police",
+        "badge": "RB",
+        "batch": "2007 Batch, AP Cadre",
+        "phone": "0866-2440991",
+        "bio": "Decorated IPS officer known for technology-driven policing and major drug-bust operations in Krishna region."
+      },
+      "stats": {
+        "activeCases": 218,
+        "personnelOnDuty": 2145,
+        "patrolUnits": 35,
+        "detentions": 8,
+        "firs": 64,
+        "solved": 174
+      },
+      "zones": [
+        {
+          "id": "ntr-z1",
+          "name": "Zone I — City Core",
+          "dcp": { "name": "T. Rajendra Prasad, IPS", "rank": "DCP Zone I", "badge": "RP", "phone": "0866-2440992" },
+          "divisions": [
+            { "id": "ntr-d1", "name": "Vijayawada City Division", "sdpo": "K. Hanumantha Rao", "stations": ["VIJAYAWADA","II TOWN PS VJA","PATAMATA","BHAVANIPURAM"] },
+            { "id": "ntr-d2", "name": "Krishnalanka Division", "sdpo": "B. Suresh Kumar", "stations": ["KRISHNALANKA","AUTO NAGAR","AJIT SINGH NAGAR"] }
+          ]
+        },
+        {
+          "id": "ntr-z2",
+          "name": "Zone II — Rural",
+          "dcp": { "name": "M. Venkata Subba Rao, IPS", "rank": "DCP Zone II", "badge": "VS", "phone": "0866-2440993" },
+          "divisions": [
+            { "id": "ntr-d3", "name": "Gannavaram Division", "sdpo": "D. Prasad Rao", "stations": ["GANNAVARAM","PENAMALURU","NUNNA","IBRAHIMPATNAM"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "districts": [
+    { "id": "krishna", "name": "Krishna District Police", "city": "Machilipatnam", "hq": "Machilipatnam", "colorHue": 280, "phone": "08672-222224", "email": "sp-krishna@appolice.gov.in", "lat": 16.1875, "lng": 81.1389, "sp": { "name": "P.S.R. Anjaneyulu, IPS", "rank": "Superintendent of Police", "badge": "AN" }, "stats": { "activeCases": 156, "personnelOnDuty": 1820, "patrolUnits": 28, "firs": 48, "solved": 118 } },
+    { "id": "guntur", "name": "Guntur District Police", "city": "Guntur", "hq": "Guntur", "colorHue": 150, "phone": "0863-2321900", "email": "sp-guntur@appolice.gov.in", "lat": 16.3067, "lng": 80.4365, "sp": { "name": "G. Siddharth Kaushal, IPS", "rank": "Superintendent of Police", "badge": "SK" }, "stats": { "activeCases": 198, "personnelOnDuty": 2100, "patrolUnits": 32, "firs": 63, "solved": 155 } },
+    { "id": "tirupati", "name": "Tirupati District Police", "city": "Tirupati", "hq": "Tirupati", "colorHue": 10, "phone": "0877-2233000", "email": "sp-tirupati@appolice.gov.in", "lat": 13.6288, "lng": 79.4192, "sp": { "name": "B. Venkateswara Rao, IPS", "rank": "Superintendent of Police", "badge": "BV" }, "stats": { "activeCases": 132, "personnelOnDuty": 1650, "patrolUnits": 24, "firs": 42, "solved": 104 } },
+    { "id": "nellore", "name": "Sri Potti Sriramulu Nellore Police", "city": "Nellore", "hq": "Nellore", "colorHue": 330, "phone": "0861-2311600", "email": "sp-nellore@appolice.gov.in", "lat": 14.4426, "lng": 79.9865, "sp": { "name": "M. Deepika, IPS", "rank": "Superintendent of Police", "badge": "MD" }, "stats": { "activeCases": 145, "personnelOnDuty": 1740, "patrolUnits": 26, "firs": 51, "solved": 112 } },
+    { "id": "kurnool", "name": "Kurnool District Police", "city": "Kurnool", "hq": "Kurnool", "colorHue": 25, "phone": "08518-222222", "email": "sp-kurnool@appolice.gov.in", "lat": 15.8281, "lng": 78.0373, "sp": { "name": "K.H. Rao, IPS", "rank": "Superintendent of Police", "badge": "KH" }, "stats": { "activeCases": 169, "personnelOnDuty": 1980, "patrolUnits": 30, "firs": 57, "solved": 131 } },
+    { "id": "kadapa", "name": "YSR Kadapa District Police", "city": "Kadapa", "hq": "Kadapa", "colorHue": 175, "phone": "08562-225000", "email": "sp-kadapa@appolice.gov.in", "lat": 14.4674, "lng": 78.8241, "sp": { "name": "R. Bhaskar, IPS", "rank": "Superintendent of Police", "badge": "RB" }, "stats": { "activeCases": 122, "personnelOnDuty": 1580, "patrolUnits": 22, "firs": 39, "solved": 97 } },
+    { "id": "chittoor", "name": "Chittoor District Police", "city": "Chittoor", "hq": "Chittoor", "colorHue": 60, "phone": "08572-224400", "email": "sp-chittoor@appolice.gov.in", "lat": 13.2172, "lng": 79.1003, "sp": { "name": "S. Senthil Kumar, IPS", "rank": "Superintendent of Police", "badge": "SS" }, "stats": { "activeCases": 138, "personnelOnDuty": 1710, "patrolUnits": 25, "firs": 44, "solved": 108 } },
+    { "id": "anantapur", "name": "Ananthapuram District Police", "city": "Anantapur", "hq": "Anantapur", "colorHue": 190, "phone": "08554-272833", "email": "sp-anantapur@appolice.gov.in", "lat": 14.6819, "lng": 77.6006, "sp": { "name": "F. Sultan, IPS", "rank": "Superintendent of Police", "badge": "FS" }, "stats": { "activeCases": 148, "personnelOnDuty": 1850, "patrolUnits": 27, "firs": 47, "solved": 115 } },
+    { "id": "srikakulam", "name": "Srikakulam District Police", "city": "Srikakulam", "hq": "Srikakulam", "colorHue": 240, "phone": "08942-222222", "email": "sp-srikakulam@appolice.gov.in", "lat": 18.2949, "lng": 83.8935, "sp": { "name": "C. Sudheer Kumar Reddy, IPS", "rank": "Superintendent of Police", "badge": "CS" }, "stats": { "activeCases": 102, "personnelOnDuty": 1420, "patrolUnits": 20, "firs": 35, "solved": 83 } },
+    { "id": "vizianagaram", "name": "Vizianagaram District Police", "city": "Vizianagaram", "hq": "Vizianagaram", "colorHue": 310, "phone": "08922-222700", "email": "sp-vizianagaram@appolice.gov.in", "lat": 18.1066, "lng": 83.3956, "sp": { "name": "B. Raja Kumari, IPS", "rank": "Superintendent of Police", "badge": "BR" }, "stats": { "activeCases": 113, "personnelOnDuty": 1510, "patrolUnits": 21, "firs": 37, "solved": 89 } },
+    { "id": "eastgodavari", "name": "East Godavari District Police", "city": "Kakinada", "hq": "Kakinada", "colorHue": 130, "phone": "0884-2365999", "email": "sp-eastgodavari@appolice.gov.in", "lat": 17.0005, "lng": 82.2475, "sp": { "name": "D.V. Srikanth, IPS", "rank": "Superintendent of Police", "badge": "DS" }, "stats": { "activeCases": 178, "personnelOnDuty": 2050, "patrolUnits": 30, "firs": 58, "solved": 139 } },
+    { "id": "westgodavari", "name": "West Godavari District Police", "city": "Eluru", "hq": "Eluru", "colorHue": 90, "phone": "08812-222000", "email": "sp-westgodavari@appolice.gov.in", "lat": 16.7107, "lng": 81.0952, "sp": { "name": "K. Suresh Reddy, IPS", "rank": "Superintendent of Police", "badge": "KS" }, "stats": { "activeCases": 159, "personnelOnDuty": 1890, "patrolUnits": 28, "firs": 52, "solved": 124 } }
+  ],
+  "grp": [
+    { "id": "grp-vizag", "name": "GRP Visakhapatnam", "city": "Visakhapatnam", "colorHue": 43, "phone": "0891-2535802", "lat": 17.7041, "lng": 83.3003 },
+    { "id": "grp-vjw", "name": "GRP Vijayawada", "city": "Vijayawada", "colorHue": 210, "phone": "0866-2577004", "lat": 16.5193, "lng": 80.6305 }
+  ],
+  "totalStats": {
+    "commissionerates": 2,
+    "policeDistricts": 26,
+    "policeStations": 771,
+    "totalPersonnel": 52000,
+    "zones": 14,
+    "divisions": 58,
+    "grpUnits": 5
+  }
+}
