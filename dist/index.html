@@ -1922,6 +1922,60 @@ const MapManager = {
     return String(p.parentCommissionerate || '').toLowerCase().trim();
   },
 
+  _findStationLayerByProps(stationProps) {
+    if (!this.layers.ps || !stationProps) return null;
+
+    const targetPs = String(stationProps.ps || '').trim().toUpperCase();
+    if (!targetPs) return null;
+
+    const targetDistrict = this._canonicalDistrictKey(stationProps.dn || stationProps.district || '');
+    const targetComm = String(stationProps.parentCommissionerate || '').toLowerCase().trim();
+    const targetDivision = String(stationProps.dv || stationProps.division || '').trim().toUpperCase();
+
+    let fallbackMatch = null;
+    let exactMatch = null;
+
+    this.layers.ps.eachLayer(layer => {
+      if (exactMatch) return;
+
+      const p = layer?.feature?.properties || {};
+      const layerPs = String(p.ps || '').trim().toUpperCase();
+      if (layerPs !== targetPs) return;
+
+      if (!fallbackMatch) fallbackMatch = layer;
+
+      const layerDistrict = this._canonicalDistrictKey(p.dn || p.district || '');
+      if (targetDistrict && layerDistrict && layerDistrict !== targetDistrict) return;
+
+      const layerComm = String(p.parentCommissionerate || '').toLowerCase().trim();
+      if (targetComm && layerComm && layerComm !== targetComm) return;
+
+      const layerDivision = String(p.dv || p.division || '').trim().toUpperCase();
+      if (targetDivision && layerDivision && layerDivision !== targetDivision) return;
+
+      exactMatch = layer;
+    });
+
+    return exactMatch || fallbackMatch || null;
+  },
+
+  focusStation(stationProps, stationLayer = null) {
+    const targetLayer = stationLayer || this._findStationLayerByProps(stationProps);
+
+    if (targetLayer?.getBounds) {
+      const bounds = targetLayer.getBounds();
+      if (bounds?.isValid && bounds.isValid()) {
+        this.map.fitBounds(bounds, { padding: [28, 28], maxZoom: 12 });
+        if (targetLayer.bringToFront) targetLayer.bringToFront();
+        return;
+      }
+    }
+
+    const lat = parseFloat(stationProps?.lt || stationProps?.lat || 0);
+    const lng = parseFloat(stationProps?.ln || stationProps?.lng || 0);
+    if (lat && lng) this.flyTo([lat, lng], 11);
+  },
+
   _buildDistrictCommIndex() {
     const map = new Map();
     for (const f of (DataManager.allStations?.features || [])) {
@@ -2231,7 +2285,7 @@ const MapManager = {
               mouseout: e => { this.layers.ps.resetStyle(e.target); },
               click: e => {
                 L.DomEvent.stopPropagation(e);
-                UIManager.showStationPanel(p);
+                UIManager.showStationPanel(p, e.target);
               }
             });
 
@@ -2546,9 +2600,6 @@ const UIManager = {
           const stFeat = DataManager.allStations?.features?.find(f => f.properties.ps === stName);
           if (stFeat) {
             UIManager.showStationPanel(stFeat.properties);
-            const lat = parseFloat(stFeat.properties.lat || stFeat.properties.lt || 0);
-            const lng = parseFloat(stFeat.properties.lng || stFeat.properties.ln || 0);
-            if (lat && lng) MapManager.flyTo([lat, lng], 13);
           }
           if (window.innerWidth <= 768) closeSidebar();
         });
@@ -2932,7 +2983,7 @@ const UIManager = {
   },
 
   // Show station panel — handles both ap-police-stations schema and comm schema
-  showStationPanel(p) {
+  showStationPanel(p, stationLayer = null) {
     // Normalise fields — ap-police-stations uses dn/dv/ph/mn/lt/ln; comm files use long names
     const stName    = p.ps  || 'Police Station';
     const district  = p.dn  || p.district  || (p.parentCommissionerate === 'vizag' ? 'Visakhapatnam' : p.parentCommissionerate === 'ntr' ? 'NTR / Vijayawada' : '');
@@ -3034,7 +3085,7 @@ const UIManager = {
     `;
 
     this._openPanel();
-    if (lat && lng) MapManager.flyTo([lat, lng], 14);
+    MapManager.focusStation(p, stationLayer);
     if (window.innerWidth <= 768) closeSidebar();
   },
 
