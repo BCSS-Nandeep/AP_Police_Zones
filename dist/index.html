@@ -149,7 +149,15 @@
       border: 1px solid var(--glass-border);
       margin: 0 auto;
     }
-    @media (min-width: 1024px) { .nav-chips { display: flex; } }
+    @media (min-width: 1024px) {
+      .nav-chips {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+      }
+    }
     .nav-center-logo {
       display: none;
       align-items: center;
@@ -1354,8 +1362,6 @@
   <nav class="nav-chips" id="view-chips" aria-label="Map views">
     <button class="chip active" data-view="all">All</button>
     <button class="chip" data-view="comm">Commissionerates</button>
-    <button class="chip" data-view="ntr">NTR</button>
-    <button class="chip" data-view="vizag">Vizag</button>
     <button class="chip" data-view="dist">Districts</button>
     <button class="chip" data-view="ps">Stations</button>
   </nav>
@@ -1380,8 +1386,6 @@
 <div class="mobile-chip-bar" id="mobile-chips" aria-label="Map views">
   <button class="chip active" data-view="all">All</button>
   <button class="chip" data-view="comm">Comms</button>
-  <button class="chip" data-view="ntr">NTR</button>
-  <button class="chip" data-view="vizag">Vizag</button>
   <button class="chip" data-view="dist">Districts</button>
   <button class="chip" data-view="ps">Stations</button>
 </div>
@@ -1504,25 +1508,7 @@
         <div class="legend-title" style="margin-bottom:0;">Districts</div>
         <button id="legend-toggle" style="font-size:9px;color:var(--text-40);background:none;border:none;cursor:pointer;padding:0;">▲ hide</button>
       </div>
-      <div id="legend-body">
-        <div class="legend-item"><div class="legend-swatch" style="background:rgba(251,191,36,0.6);border:1px solid rgba(251,191,36,0.9)"></div>Visakhapatnam</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsl(213,94%,68%,0.5);border:1px solid hsl(213,94%,68%)"></div>NTR / Vijayawada</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(130,65%,48%,0.5);border:1px solid hsl(130,65%,48%)"></div>East Godavari</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(150,65%,48%,0.5);border:1px solid hsl(150,65%,48%)"></div>Guntur</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(280,60%,65%,0.5);border:1px solid hsl(280,60%,65%)"></div>Krishna</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(28,88%,58%,0.5);border:1px solid hsl(28,88%,58%)"></div>Kurnool</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(60,78%,52%,0.5);border:1px solid hsl(60,78%,52%)"></div>Chittoor</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(190,72%,55%,0.5);border:1px solid hsl(190,72%,55%)"></div>Anantapuram</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(330,70%,62%,0.5);border:1px solid hsl(330,70%,62%)"></div>Nellore</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(200,72%,60%,0.5);border:1px solid hsl(200,72%,60%)"></div>Prakasam</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(240,65%,65%,0.5);border:1px solid hsl(240,65%,65%)"></div>Srikakulam</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(310,60%,65%,0.5);border:1px solid hsl(310,60%,65%)"></div>Vizianagaram</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(90,65%,48%,0.5);border:1px solid hsl(90,65%,48%)"></div>West Godavari</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:hsla(175,65%,48%,0.5);border:1px solid hsl(175,65%,48%)"></div>YSR Kadapa</div>
-        <div style="height:1px;background:var(--glass-border);margin:6px 0;"></div>
-        <div class="legend-item"><div class="legend-swatch" style="background:rgba(99,179,237,0.3);border:1px solid rgba(99,179,237,0.7);border-style:dashed"></div>District boundary</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:rgba(251,191,36,0.08);border:2px solid rgba(251,191,36,0.85)"></div>Commissionerate</div>
-      </div>
+      <div id="legend-body"></div>
     </div>
 
     <!-- Zonal Intelligence Panel -->
@@ -1856,6 +1842,9 @@ const MapManager = {
   tileLayer: null,
   layers: {},
   currentBasemap: 'dark',
+  activeDistrictFocus: null,
+  activeCommFilter: null,
+  districtCommIndex: new Map(),
   AP_CENTER: [15.91, 79.74],
   AP_ZOOM: 7,
   AP_BOUNDS: [[11.5, 77.0], [20.0, 85.5]],
@@ -1866,6 +1855,30 @@ const MapManager = {
     satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     osm:       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   },
+  DISTRICT_KEY_ALIASES: {
+    'ALLURI SEETHARAMARAJU': 'ALLURI SITHARAMA RAJU',
+    'ALLURI SITHARAMA RAJU': 'ALLURI SITHARAMA RAJU',
+    'ANANTAPUR': 'ANANTHAPURAM',
+    'ANANTHAPURAM': 'ANANTHAPURAM',
+    'DR B R AMBEDKAR KONASEEMA': 'DR BR AMBEDKAR KONASEEMA',
+    'DR BR AMBEDKAR KONASEEMA': 'DR BR AMBEDKAR KONASEEMA',
+    'KONASEEMA': 'DR BR AMBEDKAR KONASEEMA',
+    'YSR': 'YSR KADAPA',
+    'Y S R': 'YSR KADAPA',
+    'Y S R KADAPA': 'YSR KADAPA',
+    'YSR KADAPA': 'YSR KADAPA',
+    'SRI POTTI SRIRAMULU NELL': 'SRI POTTI SRIRAMULU NELLORE',
+    'SRI POTTI SRIRAMULU NELLORE': 'SRI POTTI SRIRAMULU NELLORE',
+    'POTTI SRIRAMULU NELLORE': 'SRI POTTI SRIRAMULU NELLORE',
+    'SRI SATHYA SAII': 'SRI SATHYA SAI',
+    'SRI SATHYA SAI': 'SRI SATHYA SAI',
+    'TIRUPATHI': 'TIRUPATI',
+    'TIRUPATI': 'TIRUPATI',
+    'VISAKHAPATNAM': 'VISAKHAPATNAM',
+    'NANDAMURI TARAKA RAMA RAO': 'NTR',
+    'NANDAMURI TARAKA RAMARAO': 'NTR',
+    'NTR': 'NTR'
+  },
 
   _isLightBasemap() {
     return this.currentBasemap === 'light' || this.currentBasemap === 'osm';
@@ -1875,23 +1888,126 @@ const MapManager = {
     return feature?.properties || feature?.feature?.properties || {};
   },
 
+  _normalizeDistrictKey(name) {
+    return String(name || '')
+      .toUpperCase()
+      .replace(/DISTRICT POLICE/g, '')
+      .replace(/\bDISTRICT\b/g, '')
+      .replace(/[^A-Z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  },
+
+  _canonicalDistrictKey(name) {
+    const key = this._normalizeDistrictKey(name);
+    return this.DISTRICT_KEY_ALIASES[key] || key;
+  },
+
+  _districtKeyFromFeature(feature) {
+    const p = this._propsFromFeature(feature);
+    return this._canonicalDistrictKey(p.NAME_1 || p.district || p.name || p.ISO || '');
+  },
+
+  _districtKeyFromData(d) {
+    return this._canonicalDistrictKey(d?.name || d?.district || d?.city || d?.id || '');
+  },
+
+  _stationDistrictKey(feature) {
+    const p = this._propsFromFeature(feature);
+    return this._canonicalDistrictKey(p.dn || p.district || '');
+  },
+
+  _stationCommId(feature) {
+    const p = this._propsFromFeature(feature);
+    return String(p.parentCommissionerate || '').toLowerCase().trim();
+  },
+
+  _buildDistrictCommIndex() {
+    const map = new Map();
+    for (const f of (DataManager.allStations?.features || [])) {
+      const p = f?.properties || {};
+      const key = this._canonicalDistrictKey(p.dn || p.district || '');
+      const comm = String(p.parentCommissionerate || '').toLowerCase().trim();
+      if (!key || !comm) continue;
+      if (!map.has(key)) map.set(key, new Set());
+      map.get(key).add(comm);
+    }
+    this.districtCommIndex = map;
+  },
+
+  _districtBelongsToComm(feature, commId) {
+    const key = this._districtKeyFromFeature(feature);
+    const set = this.districtCommIndex.get(key);
+    return !!(set && set.has(String(commId || '').toLowerCase()));
+  },
+
+  _findDistrictLayerByKey(districtKey) {
+    let exact = null;
+    let fuzzy = null;
+    this.layers.districts?.eachLayer(layer => {
+      if (exact) return;
+      const layerKey = this._districtKeyFromFeature(layer.feature);
+      if (!layerKey) return;
+      if (layerKey === districtKey) {
+        exact = layer;
+        return;
+      }
+      if (!fuzzy && (layerKey.includes(districtKey) || districtKey.includes(layerKey))) {
+        fuzzy = layer;
+      }
+    });
+    return exact || fuzzy || null;
+  },
+
   getDistrictStyle(feature, hover = false) {
-    if (this._isLightBasemap()) {
+    const base = this._isLightBasemap()
+      ? {
+          color:       hover ? 'rgba(24,70,132,0.98)' : 'rgba(28,78,142,0.92)',
+          weight:      hover ? 2.2 : 1.55,
+          opacity:     hover ? 0.98 : 0.9,
+          fillColor:   hover ? 'rgba(24,70,132,0.24)' : 'rgba(24,70,132,0.15)',
+          fillOpacity: 1,
+          dashArray:   hover ? null : '3 2'
+        }
+      : {
+          color:       'rgba(99,179,237,0.8)',
+          weight:      hover ? 2 : 1.2,
+          opacity:     hover ? 0.95 : 0.82,
+          fillColor:   hover ? 'rgba(30,80,160,0.3)' : 'rgba(30,80,160,0.15)',
+          fillOpacity: 1,
+          dashArray:   '4 3'
+        };
+
+    const districtKey = this._districtKeyFromFeature(feature);
+
+    if (this.activeCommFilter && !this._districtBelongsToComm(feature, this.activeCommFilter)) {
+      return { ...base, opacity: 0.16, fillOpacity: 0.02, weight: Math.max(0.9, base.weight - 0.3) };
+    }
+
+    if (this.activeDistrictFocus) {
+      if (districtKey === this.activeDistrictFocus) {
+        return {
+          ...base,
+          color: this._isLightBasemap() ? 'rgba(14,57,120,1)' : 'rgba(166,220,255,1)',
+          weight: Math.max(2.3, base.weight + 0.9),
+          opacity: 1,
+          fillOpacity: this._isLightBasemap() ? 0.3 : 0.24,
+          dashArray: null
+        };
+      }
+      return { ...base, opacity: 0.2, fillOpacity: this._isLightBasemap() ? 0.04 : 0.02 };
+    }
+
+    if (this.activeCommFilter) {
       return {
-        color:       hover ? 'rgba(24,70,132,0.98)' : 'rgba(28,78,142,0.92)',
-        weight:      hover ? 2.2 : 1.55,
-        fillColor:   hover ? 'rgba(24,70,132,0.24)' : 'rgba(24,70,132,0.15)',
-        fillOpacity: 1,
-        dashArray:   hover ? null : '3 2'
+        ...base,
+        weight: base.weight + 0.35,
+        opacity: Math.min(1, (base.opacity || 1) + 0.08),
+        fillOpacity: Math.min(0.35, base.fillOpacity + 0.06)
       };
     }
-    return {
-      color:       'rgba(99,179,237,0.8)',
-      weight:      hover ? 2 : 1.2,
-      fillColor:   hover ? 'rgba(30,80,160,0.3)' : 'rgba(30,80,160,0.15)',
-      fillOpacity: 1,
-      dashArray:   '4 3'
-    };
+
+    return base;
   },
 
   getStationStyle(feature, hover = false) {
@@ -1899,55 +2015,135 @@ const MapManager = {
     const distKey = p.dn || p.parentCommissionerate || '';
     const col = districtColorObj(distKey);
 
-    if (this._isLightBasemap()) {
-      const strokeL = Math.max(col.l - 22, 26);
-      const fillL = Math.max(col.l - 12, 32);
-      const sat = Math.min(col.s + 8, 95);
-      return {
-        color:       `hsl(${col.h},${sat}%,${strokeL}%)`,
-        weight:      hover ? 2.05 : 1.25,
-        opacity:     hover ? 0.98 : 0.9,
-        fillColor:   `hsl(${col.h},${Math.min(col.s + 4, 92)}%,${fillL}%)`,
-        fillOpacity: hover ? 0.3 : 0.2
-      };
+    const base = this._isLightBasemap()
+      ? (() => {
+          const strokeL = Math.max(col.l - 22, 26);
+          const fillL = Math.max(col.l - 12, 32);
+          const sat = Math.min(col.s + 8, 95);
+          return {
+            color:       `hsl(${col.h},${sat}%,${strokeL}%)`,
+            weight:      hover ? 2.05 : 1.25,
+            opacity:     hover ? 0.98 : 0.9,
+            fillColor:   `hsl(${col.h},${Math.min(col.s + 4, 92)}%,${fillL}%)`,
+            fillOpacity: hover ? 0.3 : 0.2
+          };
+        })()
+      : {
+          color:       `hsl(${col.h},${col.s}%,${Math.min(col.l + 20, 90)}%)`,
+          weight:      hover ? 1.6 : 0.85,
+          opacity:     hover ? 0.9 : 0.62,
+          fillColor:   `hsl(${col.h},${col.s}%,${col.l}%)`,
+          fillOpacity: hover ? 0.24 : 0.1
+        };
+
+    const commId = this._stationCommId(feature);
+    const stationDistKey = this._stationDistrictKey(feature);
+
+    if (this.activeCommFilter && commId !== this.activeCommFilter) {
+      return { ...base, opacity: 0.08, fillOpacity: 0.01, weight: Math.max(0.45, base.weight - 0.2) };
     }
 
-    return {
-      color:       `hsl(${col.h},${col.s}%,${Math.min(col.l + 20, 90)}%)`,
-      weight:      hover ? 1.6 : 0.85,
-      opacity:     hover ? 0.9 : 0.62,
-      fillColor:   `hsl(${col.h},${col.s}%,${col.l}%)`,
-      fillOpacity: hover ? 0.24 : 0.1
-    };
+    if (this.activeDistrictFocus) {
+      if (stationDistKey === this.activeDistrictFocus) {
+        return { ...base, weight: Math.max(1.7, base.weight + 0.45), opacity: 1, fillOpacity: Math.min(0.36, base.fillOpacity + 0.12) };
+      }
+      return { ...base, opacity: 0.12, fillOpacity: 0.015, weight: Math.max(0.5, base.weight - 0.2) };
+    }
+
+    if (this.activeCommFilter) {
+      return { ...base, opacity: Math.min(1, base.opacity + 0.1), fillOpacity: Math.min(0.32, base.fillOpacity + 0.08) };
+    }
+
+    return base;
   },
 
   getCommStyle(feature, hover = false) {
     const p = this._propsFromFeature(feature);
     const isVizag = p.id === 'vizag';
 
-    if (this._isLightBasemap()) {
-      const color = isVizag ? 'rgba(170,110,0,0.98)' : 'rgba(28,86,180,0.96)';
-      const fillColor = isVizag
-        ? (hover ? 'rgba(170,110,0,0.2)' : 'rgba(170,110,0,0.12)')
-        : (hover ? 'rgba(28,86,180,0.22)' : 'rgba(28,86,180,0.13)');
-      return {
-        color,
-        weight:      hover ? 3.2 : 2.8,
-        fillColor,
-        fillOpacity: 1,
-        dashArray:   null
-      };
+    const base = this._isLightBasemap()
+      ? (() => {
+          const color = isVizag ? 'rgba(170,110,0,0.98)' : 'rgba(28,86,180,0.96)';
+          const fillColor = isVizag
+            ? (hover ? 'rgba(170,110,0,0.2)' : 'rgba(170,110,0,0.12)')
+            : (hover ? 'rgba(28,86,180,0.22)' : 'rgba(28,86,180,0.13)');
+          return {
+            color,
+            weight:      hover ? 3.2 : 2.8,
+            opacity:     hover ? 1 : 0.95,
+            fillColor,
+            fillOpacity: 1,
+            dashArray:   null
+          };
+        })()
+      : {
+          color:       isVizag ? 'rgba(251,191,36,0.85)' : 'rgba(99,179,237,0.85)',
+          weight:      hover ? 3 : 2.5,
+          opacity:     hover ? 1 : 0.9,
+          fillColor:   isVizag
+            ? (hover ? 'rgba(251,191,36,0.18)' : 'rgba(251,191,36,0.06)')
+            : (hover ? 'rgba(99,179,237,0.18)' : 'rgba(99,179,237,0.06)'),
+          fillOpacity: 1,
+          dashArray:   null
+        };
+
+    if (this.activeCommFilter) {
+      if (String(p.id || '').toLowerCase() === this.activeCommFilter) {
+        return { ...base, opacity: 1, weight: Math.max(3.4, base.weight + 0.5), fillOpacity: Math.min(1, base.fillOpacity + 0.1) };
+      }
+      return { ...base, opacity: 0.2, fillOpacity: 0.03 };
     }
 
-    return {
-      color:       isVizag ? 'rgba(251,191,36,0.85)' : 'rgba(99,179,237,0.85)',
-      weight:      hover ? 3 : 2.5,
-      fillColor:   isVizag
-        ? (hover ? 'rgba(251,191,36,0.18)' : 'rgba(251,191,36,0.06)')
-        : (hover ? 'rgba(99,179,237,0.18)' : 'rgba(99,179,237,0.06)'),
-      fillOpacity: 1,
-      dashArray:   null
-    };
+    return base;
+  },
+
+  _zoomToDistrictBoundary(districtKey, fallbackLatLng = null) {
+    const targetLayer = this._findDistrictLayerByKey(districtKey);
+
+    if (targetLayer && targetLayer.getBounds && targetLayer.getBounds().isValid()) {
+      this.map.fitBounds(targetLayer.getBounds(), { padding: [36, 36], maxZoom: 10 });
+      if (targetLayer.bringToFront) targetLayer.bringToFront();
+      return;
+    }
+
+    if (Array.isArray(fallbackLatLng) && fallbackLatLng.length === 2) {
+      this.flyTo(fallbackLatLng, 10);
+    }
+  },
+
+  clearFilters({ keepView = true } = {}) {
+    this.activeDistrictFocus = null;
+    this.activeCommFilter = null;
+    this.refreshOverlayStyles();
+    if (!keepView) this._toggleOnly(['districts','comm','ps']);
+  },
+
+  focusDistrict(d) {
+    const districtKey = this._districtKeyFromData(d);
+    if (!districtKey) return;
+
+    this.activeDistrictFocus = districtKey;
+    this.activeCommFilter = null;
+    this._toggleOnly(['districts','comm','ps']);
+    this.refreshOverlayStyles();
+
+    const lat = parseFloat(d?.lat || 0);
+    const lng = parseFloat(d?.lng || 0);
+    this._zoomToDistrictBoundary(districtKey, (lat && lng) ? [lat, lng] : null);
+    document.getElementById('status-text').textContent = `${d?.city || d?.name || 'District'} focused`;
+  },
+
+  setCommissionerateFilter(commId, { focusMap = true } = {}) {
+    this.activeCommFilter = String(commId || '').toLowerCase().trim() || null;
+    this.activeDistrictFocus = null;
+    this._toggleOnly(['districts','comm','ps']);
+    this.refreshOverlayStyles();
+
+    if (focusMap && this.activeCommFilter) {
+      const cData = DataManager.getComm(this.activeCommFilter);
+      if (cData?.lat && cData?.lng) this.flyTo([cData.lat, cData.lng], 10);
+      document.getElementById('status-text').textContent = `${(cData?.name || this.activeCommFilter).toUpperCase()} filter`;
+    }
   },
 
   init() {
@@ -1997,6 +2193,8 @@ const MapManager = {
     loading.classList.add('show');
 
     try {
+      this._buildDistrictCommIndex();
+
       // Load district layer
       if (DataManager.districts) {
         this.layers.districts = L.geoJSON(DataManager.districts, {
@@ -2008,8 +2206,10 @@ const MapManager = {
               mouseout:  e => { this.layers.districts.resetStyle(e.target); },
               click:     e => {
                 L.DomEvent.stopPropagation(e);
-                const dData = DataManager.data?.districts?.find(d => d.city.toLowerCase() === name.toLowerCase() || d.name.toLowerCase().includes(name.toLowerCase()));
+                const featureKey = this._districtKeyFromFeature(f);
+                const dData = DataManager.data?.districts?.find(d => this._districtKeyFromData(d) === featureKey);
                 UIManager.showDistrictPanel(dData || { name, city: name });
+                if (dData) this.focusDistrict(dData);
               }
             });
             layer.bindTooltip(name, { permanent: false, sticky: true, className: 'glass-tooltip', direction: 'center' });
@@ -2077,7 +2277,10 @@ const MapManager = {
               L.DomEvent.stopPropagation(e);
               const p = f.properties;
               const cData = DataManager.getComm(p.id);
-              if (cData) UIManager.showCommPanel(cData);
+              if (cData) {
+                UIManager.showCommPanel(cData);
+                this.setCommissionerateFilter(p.id, { focusMap: false });
+              }
             }
           });
           const p = f.properties;
@@ -2129,12 +2332,37 @@ const MapManager = {
 
   setView(view) {
     switch (view) {
-      case 'all':  this.resetExtent(); break;
-      case 'comm': this._toggleOnly(['comm', 'ps']); break;
-      case 'ntr':  this.flyTo([16.506, 80.648], 11); this._toggleOnly(['ps']); break;
-      case 'vizag':this.flyTo([17.687, 83.219], 11); this._toggleOnly(['ps']); break;
-      case 'dist': this._toggleOnly(['districts']); break;
-      case 'ps':   this._toggleOnly(['ps']); break;
+      case 'all':
+        this.clearFilters({ keepView: false });
+        this.resetExtent();
+        this._toggleOnly(['districts','comm','ps']);
+        break;
+      case 'comm':
+        this.activeDistrictFocus = null;
+        this.activeCommFilter = null;
+        this._toggleOnly(['districts','comm','ps']);
+        this.refreshOverlayStyles();
+        break;
+      case 'ntr':
+        this.clearFilters();
+        this.flyTo([16.506, 80.648], 11);
+        this._toggleOnly(['ps']);
+        break;
+      case 'vizag':
+        this.clearFilters();
+        this.flyTo([17.687, 83.219], 11);
+        this._toggleOnly(['ps']);
+        break;
+      case 'dist':
+        this.activeCommFilter = null;
+        this._toggleOnly(['districts']);
+        this.refreshOverlayStyles();
+        break;
+      case 'ps':
+        this.activeCommFilter = null;
+        this._toggleOnly(['ps']);
+        this.refreshOverlayStyles();
+        break;
     }
     document.getElementById('status-text').textContent = view.toUpperCase() + ' view';
   },
@@ -2162,9 +2390,51 @@ const MapManager = {
 const UIManager = {
   init(data) {
     this._buildStats(data.totalStats);
+    this._buildLegend(data.districts);
     this._buildCommTree(data.commissionerates);
     this._buildDistList(data.districts);
     this._buildGRPList(data.grp);
+  },
+
+  _buildLegend(districts) {
+    const legendBody = document.getElementById('legend-body');
+    if (!legendBody) return;
+
+    const esc = (s) => String(s || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[ch]));
+
+    const prettyDistrict = (name) => String(name || '')
+      .replace(/\s+District Police$/i, '')
+      .replace(/\s+District$/i, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const districtItems = [...(districts || [])]
+      .map(d => {
+        const label = prettyDistrict(d?.name || d?.city || d?.id);
+        const col = districtColorObj((d?.district || label || '').toUpperCase());
+        return { label, swatch: `hsl(${col.h},${col.s}%,${col.l}%)` };
+      })
+      .filter(d => d.label)
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
+
+    const districtHtml = districtItems.map(d => `
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:${d.swatch}80;border:1px solid ${d.swatch};"></div>${esc(d.label)}
+      </div>
+    `).join('');
+
+    legendBody.innerHTML = `
+      ${districtHtml}
+      <div style="height:1px;background:var(--glass-border);margin:6px 0;"></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(99,179,237,0.3);border:1px solid rgba(99,179,237,0.7);border-style:dashed"></div>District boundary</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(251,191,36,0.08);border:2px solid rgba(251,191,36,0.85)"></div>Commissionerate</div>
+    `;
   },
 
   _buildStats(s) {
@@ -2254,7 +2524,7 @@ const UIManager = {
       details.querySelector('summary').addEventListener('dblclick', e => {
         e.preventDefault();
         UIManager.showCommPanel(c);
-        MapManager.flyTo([c.lat, c.lng], 11);
+        MapManager.setCommissionerateFilter(c.id, { focusMap: true });
         if (window.innerWidth <= 768) closeSidebar();
       });
 
@@ -2262,7 +2532,7 @@ const UIManager = {
       details.querySelector('.comm-sum-info').addEventListener('click', e => {
         e.stopPropagation();
         UIManager.showCommPanel(c);
-        if (c.lat && c.lng) MapManager.flyTo([c.lat, c.lng], 11);
+        MapManager.setCommissionerateFilter(c.id, { focusMap: true });
         if (window.innerWidth <= 768) closeSidebar();
       });
 
@@ -2340,7 +2610,7 @@ const UIManager = {
       el.querySelector('[data-dist-id]').addEventListener('click', e => {
         e.stopPropagation();
         UIManager.showDistrictPanel(d);
-        if (d.lat && d.lng) MapManager.flyTo([d.lat, d.lng], 10);
+        MapManager.focusDistrict(d);
         if (window.innerWidth <= 768) closeSidebar();
       });
 
