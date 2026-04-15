@@ -1844,6 +1844,7 @@ const MapManager = {
   currentBasemap: 'dark',
   activeDistrictFocus: null,
   activeCommFilter: null,
+  activeStationFocus: null,
   districtCommIndex: new Map(),
   AP_CENTER: [15.91, 79.74],
   AP_ZOOM: 7,
@@ -1922,6 +1923,16 @@ const MapManager = {
     return String(p.parentCommissionerate || '').toLowerCase().trim();
   },
 
+  _stationFocusKeyFromProps(stationProps) {
+    if (!stationProps) return '';
+    const ps = String(stationProps.ps || '').trim().toUpperCase();
+    if (!ps) return '';
+    const district = this._canonicalDistrictKey(stationProps.dn || stationProps.district || '');
+    const comm = String(stationProps.parentCommissionerate || '').toLowerCase().trim();
+    const division = String(stationProps.dv || stationProps.division || '').trim().toUpperCase();
+    return [ps, district, comm, division].join('|');
+  },
+
   _findStationLayerByProps(stationProps) {
     if (!this.layers.ps || !stationProps) return null;
 
@@ -1961,6 +1972,11 @@ const MapManager = {
 
   focusStation(stationProps, stationLayer = null) {
     const targetLayer = stationLayer || this._findStationLayerByProps(stationProps);
+    const stationKey = this._stationFocusKeyFromProps(stationProps);
+    if (stationKey) {
+      this.activeStationFocus = stationKey;
+      this.refreshOverlayStyles();
+    }
 
     if (targetLayer?.getBounds) {
       const bounds = targetLayer.getBounds();
@@ -2092,23 +2108,33 @@ const MapManager = {
 
     const commId = this._stationCommId(feature);
     const stationDistKey = this._stationDistrictKey(feature);
+    const stationFocusKey = this._stationFocusKeyFromProps(p);
+
+    let style = base;
 
     if (this.activeCommFilter && commId !== this.activeCommFilter) {
-      return { ...base, opacity: 0.08, fillOpacity: 0.01, weight: Math.max(0.45, base.weight - 0.2) };
-    }
-
-    if (this.activeDistrictFocus) {
+      style = { ...base, opacity: 0.08, fillOpacity: 0.01, weight: Math.max(0.45, base.weight - 0.2) };
+    } else if (this.activeDistrictFocus) {
       if (stationDistKey === this.activeDistrictFocus) {
-        return { ...base, weight: Math.max(1.7, base.weight + 0.45), opacity: 1, fillOpacity: Math.min(0.36, base.fillOpacity + 0.12) };
+        style = { ...base, weight: Math.max(1.7, base.weight + 0.45), opacity: 1, fillOpacity: Math.min(0.36, base.fillOpacity + 0.12) };
+      } else {
+        style = { ...base, opacity: 0.12, fillOpacity: 0.015, weight: Math.max(0.5, base.weight - 0.2) };
       }
-      return { ...base, opacity: 0.12, fillOpacity: 0.015, weight: Math.max(0.5, base.weight - 0.2) };
+    } else if (this.activeCommFilter) {
+      style = { ...base, opacity: Math.min(1, base.opacity + 0.1), fillOpacity: Math.min(0.32, base.fillOpacity + 0.08) };
     }
 
-    if (this.activeCommFilter) {
-      return { ...base, opacity: Math.min(1, base.opacity + 0.1), fillOpacity: Math.min(0.32, base.fillOpacity + 0.08) };
+    if (this.activeStationFocus && stationFocusKey === this.activeStationFocus) {
+      style = {
+        ...style,
+        weight: Math.max(2.2, (style.weight || 1) + 0.85),
+        opacity: 1,
+        fillOpacity: Math.min(0.42, (style.fillOpacity || 0.1) + 0.14),
+        dashArray: null
+      };
     }
 
-    return base;
+    return style;
   },
 
   getCommStyle(feature, hover = false) {
@@ -2168,6 +2194,7 @@ const MapManager = {
   clearFilters({ keepView = true } = {}) {
     this.activeDistrictFocus = null;
     this.activeCommFilter = null;
+    this.activeStationFocus = null;
     this.refreshOverlayStyles();
     if (!keepView) this._toggleOnly(['districts','comm','ps']);
   },
@@ -2178,6 +2205,7 @@ const MapManager = {
 
     this.activeDistrictFocus = districtKey;
     this.activeCommFilter = null;
+    this.activeStationFocus = null;
     this._toggleOnly(['districts','comm','ps']);
     this.refreshOverlayStyles();
 
@@ -2190,6 +2218,7 @@ const MapManager = {
   setCommissionerateFilter(commId, { focusMap = true } = {}) {
     this.activeCommFilter = String(commId || '').toLowerCase().trim() || null;
     this.activeDistrictFocus = null;
+    this.activeStationFocus = null;
     this._toggleOnly(['districts','comm','ps']);
     this.refreshOverlayStyles();
 
@@ -2209,6 +2238,13 @@ const MapManager = {
       maxBounds: this.AP_BOUNDS,
       maxBoundsViscosity: 0.6
     });
+
+    this.map.createPane('districtPane');
+    this.map.getPane('districtPane').style.zIndex = '410';
+    this.map.createPane('stationPane');
+    this.map.getPane('stationPane').style.zIndex = '420';
+    this.map.createPane('commPane');
+    this.map.getPane('commPane').style.zIndex = '430';
 
     this.tileLayer = L.tileLayer(this.BASEMAPS.dark, {
       subdomains: 'abcd',
@@ -2252,6 +2288,7 @@ const MapManager = {
       // Load district layer
       if (DataManager.districts) {
         this.layers.districts = L.geoJSON(DataManager.districts, {
+          pane: 'districtPane',
           style: f => this.getDistrictStyle(f, false),
           onEachFeature: (f, layer) => {
             const name = f.properties.ISO || f.properties.NAME_1 || 'District';
@@ -2274,6 +2311,7 @@ const MapManager = {
       // Load ALL 771 police station boundary layers — color-coded per district
       if (DataManager.allStations) {
         this.layers.ps = L.geoJSON(DataManager.allStations, {
+          pane: 'stationPane',
           style: f => this.getStationStyle(f, false),
           onEachFeature: (f, layer) => {
             const p = f.properties;
@@ -2320,6 +2358,7 @@ const MapManager = {
       ];
 
       this.layers.comm = L.geoJSON({ type: 'FeatureCollection', features: commFeatures }, {
+        pane: 'commPane',
         style: f => this.getCommStyle(f, false),
         onEachFeature: (f, layer) => {
           layer.on({
@@ -2394,6 +2433,7 @@ const MapManager = {
       case 'comm':
         this.activeDistrictFocus = null;
         this.activeCommFilter = null;
+        this.activeStationFocus = null;
         this._toggleOnly(['districts','comm','ps']);
         this.refreshOverlayStyles();
         break;
@@ -2409,11 +2449,13 @@ const MapManager = {
         break;
       case 'dist':
         this.activeCommFilter = null;
+        this.activeStationFocus = null;
         this._toggleOnly(['districts']);
         this.refreshOverlayStyles();
         break;
       case 'ps':
         this.activeCommFilter = null;
+        this.activeStationFocus = null;
         this._toggleOnly(['ps']);
         this.refreshOverlayStyles();
         break;
