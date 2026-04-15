@@ -591,6 +591,66 @@
     }
     .basemap-select option { background: #0b1530; }
 
+    .comm-pin-icon-wrap {
+      background: transparent !important;
+      border: none !important;
+    }
+    .comm-pin-icon {
+      position: relative;
+      width: 18px;
+      height: 28px;
+    }
+    .comm-pin-head {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--comm-pin-color, var(--c-vizag));
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 8px var(--comm-pin-color, var(--c-vizag));
+    }
+    .comm-pin-head::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+    }
+    .comm-pin-tail {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translateX(-50%);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 10px solid var(--comm-pin-color, var(--c-vizag));
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
+    }
+    .comm-pin-label {
+      position: absolute;
+      top: -14px;
+      left: 18px;
+      white-space: nowrap;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.15px;
+      color: var(--text-80);
+      background: rgba(9,15,35,0.84);
+      border: 1px solid var(--glass-border2);
+      border-radius: 999px;
+      padding: 2px 5px;
+      pointer-events: none;
+    }
+
     /* Coordinate bar */
     .coord-bar {
       position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
@@ -1478,6 +1538,8 @@
 
     <!-- Map toolbar -->
     <div class="map-toolbar" id="map-toolbar" role="toolbar" aria-label="Map tools">
+      <button class="tb-btn" id="tb-show-all-borders" title="Show all borders" aria-label="Show all borders">&#x21bb;</button>
+      <div class="tb-sep"></div>
       <button class="tb-btn" id="tb-zoom-in"  title="Zoom in (+)" aria-label="Zoom in">+</button>
       <button class="tb-btn" id="tb-zoom-out" title="Zoom out (−)" aria-label="Zoom out">−</button>
       <div class="tb-sep"></div>
@@ -2005,6 +2067,127 @@ const MapManager = {
     this.districtCommIndex = map;
   },
 
+  _extractMultiPolygonCoordinates(geometry) {
+    if (!geometry) return [];
+    if (geometry.type === 'Polygon' && Array.isArray(geometry.coordinates)) return [geometry.coordinates];
+    if (geometry.type === 'MultiPolygon' && Array.isArray(geometry.coordinates)) return geometry.coordinates;
+    return [];
+  },
+
+  _fallbackCommissionerateFeatures() {
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: { id: 'ntr', name: 'NTR Commissionerate', city: 'Vijayawada' },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[[80.35,16.28],[80.85,16.28],[80.90,16.48],[80.85,16.75],[80.50,16.80],[80.30,16.65],[80.25,16.42],[80.35,16.28]]]
+          }
+        },
+        {
+          type: 'Feature',
+          properties: { id: 'vizag', name: 'Visakhapatnam Commissionerate', city: 'Visakhapatnam' },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[[82.90,17.45],[83.65,17.40],[83.75,17.65],[83.65,17.98],[83.25,18.05],[83.00,17.92],[82.85,17.72],[82.90,17.45]]]
+          }
+        }
+      ]
+    };
+  },
+
+  _buildCommissionerateFeatureCollection() {
+    const grouped = new Map();
+    for (const f of (DataManager.allStations?.features || [])) {
+      const p = f?.properties || {};
+      const commId = String(p.parentCommissionerate || '').toLowerCase().trim();
+      if (!commId) continue;
+      const coords = this._extractMultiPolygonCoordinates(f.geometry);
+      if (!coords.length) continue;
+      if (!grouped.has(commId)) grouped.set(commId, []);
+      grouped.get(commId).push(...coords);
+    }
+
+    const features = (DataManager.data?.commissionerates || []).map(c => {
+      const id = String(c?.id || '').toLowerCase().trim();
+      if (!id) return null;
+      const coords = grouped.get(id) || [];
+      if (!coords.length) return null;
+      return {
+        type: 'Feature',
+        properties: {
+          id,
+          name: c?.name || `${id.toUpperCase()} Commissionerate`,
+          city: c?.city || ''
+        },
+        geometry: { type: 'MultiPolygon', coordinates: coords }
+      };
+    }).filter(Boolean);
+
+    return features.length
+      ? { type: 'FeatureCollection', features }
+      : this._fallbackCommissionerateFeatures();
+  },
+
+  _escapeHTML(text) {
+    return String(text || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[ch]));
+  },
+
+  _commPinLabel(c) {
+    const label = String(c?.shortName || c?.name || c?.id || 'Commissionerate').trim();
+    return label.length > 22 ? `${label.slice(0, 21)}...` : label;
+  },
+
+  _createCommPinIcon(c) {
+    const label = this._escapeHTML(this._commPinLabel(c));
+    const color = commColor(c);
+    return L.divIcon({
+      className: 'comm-pin-icon-wrap',
+      iconSize: [18, 28],
+      iconAnchor: [9, 24],
+      html: `
+            <div class="comm-pin-icon" style="--comm-pin-color:${color}">
+              <span class="comm-pin-head"></span>
+              <span class="comm-pin-tail"></span>
+              <span class="comm-pin-label">${label}</span>
+            </div>
+          `
+    });
+  },
+
+  _createCommissioneratePins() {
+    const pinLayers = [];
+    for (const c of (DataManager.data?.commissionerates || [])) {
+      const lat = parseFloat(c?.lat || 0);
+      const lng = parseFloat(c?.lng || 0);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng) || !lat || !lng) continue;
+
+      const marker = L.marker([lat, lng], {
+        pane: 'commPinPane',
+        icon: this._createCommPinIcon(c),
+        title: c?.name || c?.id || 'Commissionerate'
+      });
+
+      marker.on('click', e => {
+        L.DomEvent.stopPropagation(e);
+        UIManager.showCommPanel(c);
+        this.setCommissionerateFilter(c.id, { focusMap: false });
+      });
+
+      pinLayers.push(marker);
+    }
+
+    this.layers.commPins = L.layerGroup(pinLayers).addTo(this.map);
+  },
+
   _districtBelongsToComm(feature, commId) {
     const key = this._districtKeyFromFeature(feature);
     const set = this.districtCommIndex.get(key);
@@ -2191,6 +2374,32 @@ const MapManager = {
     }
   },
 
+  _zoomToCommissionerateBoundary(commId, fallbackLatLng = null) {
+    const targetId = String(commId || '').toLowerCase().trim();
+    if (!targetId || !this.layers.comm) {
+      if (Array.isArray(fallbackLatLng) && fallbackLatLng.length === 2) this.flyTo(fallbackLatLng, 10);
+      return;
+    }
+
+    let bounds = null;
+    this.layers.comm.eachLayer(layer => {
+      const layerId = String(layer?.feature?.properties?.id || '').toLowerCase().trim();
+      if (layerId !== targetId || !layer.getBounds) return;
+      const b = layer.getBounds();
+      if (!b?.isValid || !b.isValid()) return;
+      bounds = bounds ? bounds.extend(b) : b;
+    });
+
+    if (bounds?.isValid && bounds.isValid()) {
+      this.map.fitBounds(bounds, { padding: [36, 36], maxZoom: 11 });
+      return;
+    }
+
+    if (Array.isArray(fallbackLatLng) && fallbackLatLng.length === 2) {
+      this.flyTo(fallbackLatLng, 10);
+    }
+  },
+
   clearFilters({ keepView = true } = {}) {
     this.activeDistrictFocus = null;
     this.activeCommFilter = null;
@@ -2224,7 +2433,9 @@ const MapManager = {
 
     if (focusMap && this.activeCommFilter) {
       const cData = DataManager.getComm(this.activeCommFilter);
-      if (cData?.lat && cData?.lng) this.flyTo([cData.lat, cData.lng], 10);
+      const lat = parseFloat(cData?.lat || 0);
+      const lng = parseFloat(cData?.lng || 0);
+      this._zoomToCommissionerateBoundary(this.activeCommFilter, (lat && lng) ? [lat, lng] : null);
       document.getElementById('status-text').textContent = `${(cData?.name || this.activeCommFilter).toUpperCase()} filter`;
     }
   },
@@ -2245,6 +2456,8 @@ const MapManager = {
     this.map.getPane('stationPane').style.zIndex = '420';
     this.map.createPane('commPane');
     this.map.getPane('commPane').style.zIndex = '430';
+    this.map.createPane('commPinPane');
+    this.map.getPane('commPinPane').style.zIndex = '440';
 
     this.tileLayer = L.tileLayer(this.BASEMAPS.dark, {
       subdomains: 'abcd',
@@ -2258,6 +2471,7 @@ const MapManager = {
     });
 
     // Setup toolbar
+    document.getElementById('tb-show-all-borders').addEventListener('click', () => this.showAllBorders());
     document.getElementById('tb-zoom-in') .addEventListener('click', () => this.map.zoomIn());
     document.getElementById('tb-zoom-out').addEventListener('click', () => this.map.zoomOut());
     document.getElementById('basemap-select').addEventListener('change', e => this.switchBasemap(e.target.value));
@@ -2337,27 +2551,8 @@ const MapManager = {
         }).addTo(this.map);
       }
 
-      // Commissionerate highlight layers (mock boundaries via station union bbox)
-      const commFeatures = [
-        {
-          type: 'Feature',
-          properties: { id: 'ntr', name: 'NTR Commissionerate', city: 'Vijayawada' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[[80.35,16.28],[80.85,16.28],[80.90,16.48],[80.85,16.75],[80.50,16.80],[80.30,16.65],[80.25,16.42],[80.35,16.28]]]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { id: 'vizag', name: 'Visakhapatnam Commissionerate', city: 'Visakhapatnam' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[[82.90,17.45],[83.65,17.40],[83.75,17.65],[83.65,17.98],[83.25,18.05],[83.00,17.92],[82.85,17.72],[82.90,17.45]]]
-          }
-        }
-      ];
-
-      this.layers.comm = L.geoJSON({ type: 'FeatureCollection', features: commFeatures }, {
+      // Commissionerate boundaries from exact station polygons (fallbacks to mock if unavailable)
+      this.layers.comm = L.geoJSON(this._buildCommissionerateFeatureCollection(), {
         pane: 'commPane',
         style: f => this.getCommStyle(f, false),
         onEachFeature: (f, layer) => {
@@ -2380,6 +2575,9 @@ const MapManager = {
           layer.bindTooltip(p.name, { permanent: false, sticky: true, className: 'glass-tooltip', direction: 'center' });
         }
       }).addTo(this.map);
+
+      // Pin markers for CP view
+      this._createCommissioneratePins();
 
     } catch(e) {
       console.error('Layer loading error:', e);
@@ -2415,12 +2613,28 @@ const MapManager = {
     } else {
       if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
     }
+    if (name === 'comm' && this.layers.commPins) {
+      if (show) {
+        if (!this.map.hasLayer(this.layers.commPins)) this.map.addLayer(this.layers.commPins);
+      } else {
+        if (this.map.hasLayer(this.layers.commPins)) this.map.removeLayer(this.layers.commPins);
+      }
+    }
     this._updateStatus();
   },
 
   _updateStatus() {
-    const active = Object.entries(this.layers).filter(([, l]) => this.map.hasLayer(l)).map(([k]) => k);
+    const active = Object.entries(this.layers)
+      .filter(([k, l]) => k !== 'commPins' && this.map.hasLayer(l))
+      .map(([k]) => k);
     document.getElementById('status-text').textContent = active.length ? active.join(' + ') + ' active' : 'No layers';
+  },
+
+  showAllBorders({ resetView = true } = {}) {
+    this.clearFilters({ keepView: false });
+    if (resetView) this.resetExtent();
+    UIManager.resetPanel();
+    document.getElementById('status-text').textContent = 'All borders visible';
   },
 
   setView(view) {
@@ -2434,7 +2648,7 @@ const MapManager = {
         this.activeDistrictFocus = null;
         this.activeCommFilter = null;
         this.activeStationFocus = null;
-        this._toggleOnly(['districts','comm','ps']);
+        this._toggleOnly(['comm']);
         this.refreshOverlayStyles();
         break;
       case 'ntr':
@@ -2464,15 +2678,17 @@ const MapManager = {
   },
 
   _toggleOnly(keep) {
-    const all = ['districts','comm','ps'];
+    const keepSet = new Set(keep);
+    if (keepSet.has('comm')) keepSet.add('commPins');
+    const all = ['districts','comm','ps','commPins'];
     all.forEach(k => {
       if (!this.layers[k]) return;
-      if (keep.includes(k)) { if (!this.map.hasLayer(this.layers[k])) this.map.addLayer(this.layers[k]); }
+      if (keepSet.has(k)) { if (!this.map.hasLayer(this.layers[k])) this.map.addLayer(this.layers[k]); }
       else { if (this.map.hasLayer(this.layers[k])) this.map.removeLayer(this.layers[k]); }
     });
     // Sync toolbar buttons
     document.querySelectorAll('.tb-btn[data-layer]').forEach(b => {
-      b.classList.toggle('active', keep.includes(b.dataset.layer));
+      b.classList.toggle('active', keepSet.has(b.dataset.layer));
     });
   },
 
@@ -3135,6 +3351,20 @@ const UIManager = {
     document.getElementById('intel-panel').classList.add('open');
   },
 
+  resetPanel() {
+    const panelBody = document.getElementById('panel-body');
+    if (panelBody) {
+      panelBody.innerHTML = `
+        <div class="panel-empty">
+          <div class="panel-empty-icon">🏛️</div>
+          <div class="panel-empty-title">Officer Insights</div>
+          <div class="panel-empty-sub">Click any region on the map or select a unit from the command structure to view leadership & caseload intelligence.</div>
+        </div>
+      `;
+    }
+    this.closePanel();
+  },
+
   closePanel() {
     document.getElementById('intel-panel').classList.remove('open');
   },
@@ -3323,7 +3553,7 @@ function syncChips(view) {
 document.getElementById('sidebar-toggle').addEventListener('click', () => toggleSidebar());
 document.getElementById('sidebar-close-mobile').addEventListener('click', () => closeSidebar());
 document.getElementById('panel-close').addEventListener('click', () => UIManager.closePanel());
-document.getElementById('reset-view-btn').addEventListener('click', () => MapManager.resetExtent());
+document.getElementById('reset-view-btn').addEventListener('click', () => MapManager.showAllBorders());
 document.getElementById('sidebar-search').addEventListener('input', e => UIManager.filterSidebar(e.target.value));
 
 // Legend collapse toggle
@@ -3357,7 +3587,7 @@ document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
   const k = e.key.toLowerCase();
   if (k === 's') toggleSidebar();
-  if (k === 'r') MapManager.resetExtent();
+  if (k === 'r') MapManager.showAllBorders();
   if (k === 'b') document.getElementById('theme-toggle').click();
   if (k === 'escape') { UIManager.closePanel(); MobileNav.hideSearch(); }
   if (k === '+' || k === '=') MapManager.map?.zoomIn();
