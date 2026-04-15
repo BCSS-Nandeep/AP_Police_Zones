@@ -1,0 +1,476 @@
+{
+  "source": "AP Police Telephone Directory",
+  "sourceUrl": "https://citizen.appolice.gov.in/jsp/chiefOfficecontact.do?method=retrieveOfficerDetailsList",
+  "updatedAt": "2026-04-15T07:00:30.930Z",
+  "officers": [
+    {
+      "slNo": 1,
+      "designation": "Director General of Police",
+      "landline": "0863-2340446 (O) 2340002 (F)",
+      "mobile": "--",
+      "email": "dgp@appolice.gov.in, dgpcamp@gmail.com"
+    },
+    {
+      "slNo": 2,
+      "designation": "Addl. Director General of Police (Law & Order)",
+      "landline": "2340454",
+      "mobile": "",
+      "email": ""
+    },
+    {
+      "slNo": 3,
+      "designation": "Addl. Director General of Police (Road Safety)",
+      "landline": "2373411",
+      "mobile": "9121059072",
+      "email": "adgproadsafetyap@gmail.com"
+    },
+    {
+      "slNo": 4,
+      "designation": "Inspector General of Police (P & L) and (Welfare)",
+      "landline": "2340457",
+      "mobile": "8977744513",
+      "email": "adg_pl@co.appolice.gov.in, aoslprb@gmail.com"
+    },
+    {
+      "slNo": 5,
+      "designation": "Inspector General of Police (Personnel)",
+      "landline": "2340361",
+      "mobile": "9440700101",
+      "email": "igppers@appolice.gov.in, adghgs@gmail.com"
+    },
+    {
+      "slNo": 6,
+      "designation": "Inspector General of Police (Co- Ordanation)",
+      "landline": "2340361",
+      "mobile": "9440700101",
+      "email": "igppers@appolice.gov.in, adghgs@gmail.com"
+    },
+    {
+      "slNo": 7,
+      "designation": "Inspector General of Police (Home Guards)",
+      "landline": "2340361",
+      "mobile": "9440700101",
+      "email": "igppers@appolice.gov.in, adghgs@gmail.com"
+    },
+    {
+      "slNo": 8,
+      "designation": "Inspector General of Police (Organazition) and Eagle Wing",
+      "landline": "2340152",
+      "mobile": "9491112077",
+      "email": "plg.section@gamil.com"
+    },
+    {
+      "slNo": 9,
+      "designation": "Inspector General of Police (Training)",
+      "landline": "2340355",
+      "mobile": "--",
+      "email": "igptrainingap@gmail.com, appoliceacademy2023@gmail.com"
+    },
+    {
+      "slNo": 10,
+      "designation": "Inspector General of Police (Railways)",
+      "landline": "2340357",
+      "mobile": "9121058961",
+      "email": "apadgprailways@gmail.com, appolicesportsofiice@gmail.com"
+    },
+    {
+      "slNo": 11,
+      "designation": "Dy. Inspector General of Police (L&O)",
+      "landline": "2340265",
+      "mobile": "8008889162",
+      "email": "diglawandorder24@gmail.com"
+    },
+    {
+      "slNo": 12,
+      "designation": "Dy. Inspector General of Police (Admn.)",
+      "landline": "2340262",
+      "mobile": "9000120901",
+      "email": "digadmnappolice@gmail.com"
+    },
+    {
+      "slNo": 13,
+      "designation": "Dy. Inspector General of Police (Legal)",
+      "landline": "2340274",
+      "mobile": "--",
+      "email": "igplegal11@gmail.com"
+    },
+    {
+      "slNo": 14,
+      "designation": "Dy. Inspector General of Police (Road Safety)",
+      "landline": "--",
+      "mobile": "9441581802",
+      "email": "Digroadsafety@gmail.com"
+    },
+    {
+      "slNo": 15,
+      "designation": "Asst. Inspector General of Police (L & O)",
+      "landline": "2340388",
+      "mobile": "9121058158",
+      "email": "aigloappolice@gmail.com"
+    },
+    {
+      "slNo": 16,
+      "designation": "Asst. Inspector General of police (Admn)",
+      "landline": "2340276",
+      "mobile": "9440700939",
+      "email": "aigadmnco@gmail.com"
+    },
+    {
+      "slNo": 17,
+      "designation": "Secretary Bhadratha",
+      "landline": "2340268",
+      "mobile": "8919487008",
+      "email": "apbhadratha@gmail.com"
+    },
+    {
+      "slNo": 18,
+      "designation": "Chief Administrative Officer (P&L)",
+      "landline": "2340376",
+      "mobile": "9440700445",
+      "email": "--"
+    },
+    {
+      "slNo": 19,
+      "designation": "Chief Administrative Officer (Esst.)",
+      "landline": "2340293",
+      "mobile": "8333908096",
+      "email": "--"
+    },
+    {
+      "slNo": 20,
+      "designation": "Chief Administrative Officer (GE)",
+      "landline": "2340462",
+      "mobile": "7382954906",
+      "email": "--"
+    },
+    {
+      "slNo": 21,
+      "designation": "Administrative Officer (PS to DGP)",
+      "landline": "2340460",
+      "mobile": "9440700190",
+      "email": "--"
+    },
+    {
+      "slNo": 22,
+      "designation": "Asst. Administrative Officer (Org.)",
+      "landline": "2340288",
+      "mobile": "9154922643",
+      "email": "--"
+    },
+    {
+      "slNo": 23,
+      "designation": "Asst. Administrative Officer (P&L)",
+      "landline": "--",
+      "mobile": "9154922644",
+      "email": "--"
+    },
+    {
+      "slNo": 24,
+      "designation": "Asst. Administrative Officer (L&O)",
+      "landline": "2340446",
+      "mobile": "9154922645",
+      "email": "--"
+    },
+    {
+      "slNo": 25,
+      "designation": "Asst. Administrative Officer (Co-Ord)",
+      "landline": "2340252",
+      "mobile": "9154922646",
+      "email": "--"
+    },
+    {
+      "slNo": 26,
+      "designation": "Asst. Administrative Officer (Personnel)",
+      "landline": "2340289",
+      "mobile": "7901003627",
+      "email": "--"
+    },
+    {
+      "slNo": 27,
+      "designation": "Asst. Administrative Officer (Legal)",
+      "landline": "2340288",
+      "mobile": "9154922648",
+      "email": "--"
+    },
+    {
+      "slNo": 28,
+      "designation": "Asst. Administrative Officer, APPA",
+      "landline": "2340371",
+      "mobile": "--",
+      "email": "--"
+    },
+    {
+      "slNo": 29,
+      "designation": "Supdt. (H-Sec.)",
+      "landline": "2340373",
+      "mobile": "9440681698",
+      "email": "--"
+    },
+    {
+      "slNo": 30,
+      "designation": "Supdt. (K-Sec.)",
+      "landline": "2340374",
+      "mobile": "9121288876",
+      "email": "--"
+    },
+    {
+      "slNo": 31,
+      "designation": "Supdt. (V-Sec.)",
+      "landline": "2340372",
+      "mobile": "9154900563",
+      "email": "--"
+    },
+    {
+      "slNo": 32,
+      "designation": "Supdt. (G-Sec.)",
+      "landline": "2340464",
+      "mobile": "9440901973",
+      "email": "--"
+    },
+    {
+      "slNo": 33,
+      "designation": "Supdt. (O-Sec.)",
+      "landline": "2340465",
+      "mobile": "9121288878",
+      "email": "--"
+    },
+    {
+      "slNo": 34,
+      "designation": "Supdt. (L&O-Sec.)",
+      "landline": "2340446",
+      "mobile": "7901004627",
+      "email": "--"
+    },
+    {
+      "slNo": 35,
+      "designation": "Supdt. (C-Sec.)",
+      "landline": "2340252",
+      "mobile": "9440901970",
+      "email": "--"
+    },
+    {
+      "slNo": 36,
+      "designation": "Supdt. (ME-Sec.)",
+      "landline": "2340291",
+      "mobile": "9440901963",
+      "email": "--"
+    },
+    {
+      "slNo": 37,
+      "designation": "Supdt. (E-Sec.)",
+      "landline": "2340297",
+      "mobile": "9440627099",
+      "email": "--"
+    },
+    {
+      "slNo": 38,
+      "designation": "Supdt. (T1-Sec.)",
+      "landline": "2340290",
+      "mobile": "9440796699",
+      "email": "--"
+    },
+    {
+      "slNo": 39,
+      "designation": "Supdt. (N-Sec.)",
+      "landline": "2340296",
+      "mobile": "9440627701",
+      "email": "--"
+    },
+    {
+      "slNo": 40,
+      "designation": "Supdt. (Legal 1-Sec.)",
+      "landline": "2340283",
+      "mobile": "9100989156",
+      "email": "--"
+    },
+    {
+      "slNo": 41,
+      "designation": "Supdt. (Legal 2-Sec.)",
+      "landline": "2340283",
+      "mobile": "9154259925",
+      "email": "--"
+    },
+    {
+      "slNo": 42,
+      "designation": "Supdt. (Planing)",
+      "landline": "2340295",
+      "mobile": "9154219984",
+      "email": "--"
+    },
+    {
+      "slNo": 43,
+      "designation": "Supdt. (In & Out ward Sec.)",
+      "landline": "2340002",
+      "mobile": "9100989157",
+      "email": "--"
+    },
+    {
+      "slNo": 44,
+      "designation": "Supdt. (Road Safety-Sec.)",
+      "landline": "2340286",
+      "mobile": "7995826664",
+      "email": "--"
+    },
+    {
+      "slNo": 45,
+      "designation": "Supdt. (Training)",
+      "landline": "2340287",
+      "mobile": "--",
+      "email": "--"
+    },
+    {
+      "slNo": 46,
+      "designation": "Supdt. (Home Gaurds)",
+      "landline": "2340252",
+      "mobile": "7995055079",
+      "email": "--"
+    },
+    {
+      "slNo": 47,
+      "designation": "Jt. Director (Accts.)",
+      "landline": "2340368",
+      "mobile": "8374109699",
+      "email": "--"
+    },
+    {
+      "slNo": 48,
+      "designation": "Asst. Accounts Officer (Accts.)",
+      "landline": "2340383",
+      "mobile": "9440627209",
+      "email": "--"
+    },
+    {
+      "slNo": 49,
+      "designation": "Jr. Accounts Officer (P-Sec)",
+      "landline": "2340365",
+      "mobile": "9440627208",
+      "email": "--"
+    },
+    {
+      "slNo": 50,
+      "designation": "Jr. Accounts Officer (L4-Sec)",
+      "landline": "2340365",
+      "mobile": "9490618583",
+      "email": "--"
+    },
+    {
+      "slNo": 51,
+      "designation": "Jr. Accounts Officer (Audit)",
+      "landline": "2340369",
+      "mobile": "9490618584",
+      "email": "--"
+    },
+    {
+      "slNo": 52,
+      "designation": "Jr. Accounts Officer (L-Sec)",
+      "landline": "2340370",
+      "mobile": "9490618586",
+      "email": "--"
+    },
+    {
+      "slNo": 53,
+      "designation": "Chief Analytics Officer, (SC-Sec)",
+      "landline": "2340460",
+      "mobile": "7075836999",
+      "email": "--"
+    },
+    {
+      "slNo": 54,
+      "designation": "Analytics Officer, (SC-Sec)",
+      "landline": "--",
+      "mobile": "9440627344",
+      "email": "--"
+    },
+    {
+      "slNo": 55,
+      "designation": "DSP, Central Stores",
+      "landline": "2340375",
+      "mobile": "9440627951",
+      "email": "--"
+    },
+    {
+      "slNo": 56,
+      "designation": "Reserve Inspector, (Central Store)",
+      "landline": "2340371",
+      "mobile": "9440901968",
+      "email": "--"
+    },
+    {
+      "slNo": 57,
+      "designation": "Reserve Inspector, (Security Officer)",
+      "landline": "--",
+      "mobile": "9440901966",
+      "email": "--"
+    },
+    {
+      "slNo": 58,
+      "designation": "Reserve Inspector, (Arms Dump)",
+      "landline": "--",
+      "mobile": "8333994032",
+      "email": "--"
+    },
+    {
+      "slNo": 59,
+      "designation": "Asst. Commandant, Liaison Officer (P&L)",
+      "landline": "--",
+      "mobile": "7382931601",
+      "email": "--"
+    },
+    {
+      "slNo": 60,
+      "designation": "Reserve Inspector Liaison Officer (Personnel)",
+      "landline": "--",
+      "mobile": "8332989937",
+      "email": "--"
+    },
+    {
+      "slNo": 61,
+      "designation": "Asst. Commanda Liaison Officer (Legal)",
+      "landline": "--",
+      "mobile": "9440627280",
+      "email": "--"
+    },
+    {
+      "slNo": 62,
+      "designation": "Reserve Inspector Sports",
+      "landline": "--",
+      "mobile": "8333994030",
+      "email": "--"
+    },
+    {
+      "slNo": 63,
+      "designation": "Liaison Officer Telephones",
+      "landline": "2340305",
+      "mobile": "9440627555",
+      "email": "--"
+    },
+    {
+      "slNo": 64,
+      "designation": "Sports Office",
+      "landline": "--",
+      "mobile": "8333994033",
+      "email": "--"
+    },
+    {
+      "slNo": 65,
+      "designation": "DG Command Control",
+      "landline": "2340471",
+      "mobile": "7382938775",
+      "email": "--"
+    },
+    {
+      "slNo": 66,
+      "designation": "Cyber Crime Complaints (Women and Children Centric)",
+      "landline": "--",
+      "mobile": "9121211100",
+      "email": "--"
+    },
+    {
+      "slNo": 67,
+      "designation": "EAGLE (ANTF) Cell",
+      "landline": "2340388",
+      "mobile": "7075881908",
+      "email": "--"
+    }
+  ]
+}

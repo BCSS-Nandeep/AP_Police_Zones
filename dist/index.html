@@ -149,15 +149,7 @@
       border: 1px solid var(--glass-border);
       margin: 0 auto;
     }
-    @media (min-width: 1024px) {
-      .nav-chips {
-        display: flex;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        margin: 0;
-      }
-    }
+    @media (min-width: 1024px) { .nav-chips { display: flex; } }
     .nav-center-logo {
       display: none;
       align-items: center;
@@ -1362,6 +1354,8 @@
   <nav class="nav-chips" id="view-chips" aria-label="Map views">
     <button class="chip active" data-view="all">All</button>
     <button class="chip" data-view="comm">Commissionerates</button>
+    <button class="chip" data-view="ntr">NTR</button>
+    <button class="chip" data-view="vizag">Vizag</button>
     <button class="chip" data-view="dist">Districts</button>
     <button class="chip" data-view="ps">Stations</button>
   </nav>
@@ -1386,6 +1380,8 @@
 <div class="mobile-chip-bar" id="mobile-chips" aria-label="Map views">
   <button class="chip active" data-view="all">All</button>
   <button class="chip" data-view="comm">Comms</button>
+  <button class="chip" data-view="ntr">NTR</button>
+  <button class="chip" data-view="vizag">Vizag</button>
   <button class="chip" data-view="dist">Districts</button>
   <button class="chip" data-view="ps">Stations</button>
 </div>
